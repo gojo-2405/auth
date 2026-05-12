@@ -5,8 +5,8 @@ RUN apk add --no-cache dumb-init
 
 # ── Stage 2: Dependencies ─────────────────────────────────────────────────────
 FROM base AS deps
-COPY package.json package-lock.json* ./
-RUN npm ci --omit=dev
+COPY package.json ./
+RUN npm install --omit=dev
 
 # ── Stage 3: Production image ─────────────────────────────────────────────────
 FROM base AS runner

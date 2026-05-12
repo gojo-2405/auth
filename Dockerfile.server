@@ -1,0 +1,27 @@
+# ── Stage 1: Base ────────────────────────────────────────────────────────────
+FROM node:20-alpine AS base
+WORKDIR /app
+RUN apk add --no-cache dumb-init
+
+# ── Stage 2: Dependencies ─────────────────────────────────────────────────────
+FROM base AS deps
+COPY package.json package-lock.json* ./
+RUN npm ci --omit=dev
+
+# ── Stage 3: Production image ─────────────────────────────────────────────────
+FROM base AS runner
+
+ENV NODE_ENV=production
+
+# Non-root user for security
+RUN addgroup -g 1001 -S nodejs && adduser -S nodejs -u 1001
+USER nodejs
+
+COPY --from=deps --chown=nodejs:nodejs /app/node_modules ./node_modules
+COPY --chown=nodejs:nodejs server/ ./server/
+COPY --chown=nodejs:nodejs package.json ./
+
+EXPOSE 5000
+
+# dumb-init handles signals properly (graceful shutdown)
+CMD ["dumb-init", "node", "server/index.js"]

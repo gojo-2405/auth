@@ -1,0 +1,77 @@
+version: "3.9"
+
+# ─────────────────────────────────────────────────────────────────────────────
+#  docker compose up --env-file .env          → uses your RDS, no local DB
+#  docker compose --profile local up          → spins up a local postgres too
+# ─────────────────────────────────────────────────────────────────────────────
+
+services:
+
+  # ── Backend API ─────────────────────────────────────────────────────────────
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile.server
+    container_name: nexcore-api
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      NODE_ENV: production
+      PORT: 5000
+    ports:
+      - "5000:5000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+        required: false   # skipped when using RDS (no local postgres profile)
+    networks:
+      - nexcore
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:5000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+
+  # ── Frontend (nginx) ─────────────────────────────────────────────────────────
+  client:
+    build:
+      context: .
+      dockerfile: Dockerfile.client
+    container_name: nexcore-web
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - server
+    networks:
+      - nexcore
+
+  # ── Local PostgreSQL (optional — only used without RDS) ────────────────────
+  postgres:
+    image: postgres:16-alpine
+    container_name: nexcore-db
+    profiles: ["local"]          # only starts with: docker compose --profile local up
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB:       ${DB_NAME:-techsite_db}
+      POSTGRES_USER:     ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - nexcore
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+networks:
+  nexcore:
+    driver: bridge
+
+volumes:
+  pgdata:

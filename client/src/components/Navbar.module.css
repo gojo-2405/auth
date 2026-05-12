@@ -1,0 +1,102 @@
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 20px 0;
+  transition: all 0.3s ease;
+}
+.scrolled {
+  background: rgba(5,8,16,0.92);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 0;
+}
+.inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 800;
+  font-size: 1.35rem;
+  letter-spacing: -0.5px;
+}
+.logoIcon {
+  color: var(--primary);
+  font-size: 1.5rem;
+  filter: drop-shadow(0 0 8px var(--primary));
+}
+.logoAccent { color: var(--primary); }
+.links {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.link {
+  padding: 8px 16px;
+  border-radius: 8px;
+  color: var(--text2);
+  font-weight: 500;
+  font-size: 0.9rem;
+  transition: color 0.2s;
+}
+.link:hover { color: var(--text); }
+.btnPrimary {
+  padding: 9px 22px;
+  background: var(--primary);
+  color: #000;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+.btnPrimary:hover { background: #33ddff; transform: translateY(-1px); }
+.btnOutline {
+  padding: 9px 22px;
+  background: transparent;
+  color: var(--text2);
+  border: 1px solid var(--border2);
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+.btnOutline:hover { color: var(--text); border-color: var(--primary); }
+
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  padding: 8px;
+}
+.bar {
+  display: block;
+  width: 24px; height: 2px;
+  background: var(--text2);
+  border-radius: 2px;
+  transition: all 0.3s;
+}
+
+@media (max-width: 768px) {
+  .hamburger { display: flex; }
+  .links {
+    display: none;
+    position: absolute;
+    top: 100%; left: 0; right: 0;
+    flex-direction: column;
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 20px;
+    gap: 4px;
+  }
+  .links.open { display: flex; }
+  .link { width: 100%; padding: 12px 16px; }
+  .btnPrimary, .btnOutline { width: 100%; text-align: center; margin-top: 8px; }
+}

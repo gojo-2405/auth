@@ -27,7 +27,7 @@
         { "name": "DB_SSL",         "value": "true" },
         { "name": "JWT_SECRET",     "value": "EsIenVpBiHjarLhzrnq712ronsmoDY1w" },
         { "name": "JWT_EXPIRES_IN", "value": "7d" },
-        { "name": "CLIENT_URL",     "value": "http://localhost" }
+        { "name": "CLIENT_URL",     "value": "http://0.0.0.0" }
       ],
         "logConfiguration": {
           "logDriver": "awslogs",

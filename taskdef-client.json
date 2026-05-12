@@ -1,9 +1,9 @@
 {
-    "family": "earth",
+    "family": "nex-client",
     "taskRoleArn": "arn:aws:iam::463367046625:role/ecsTaskExecutionRole-ssm",
     "containerDefinitions": [
       {
-        "name": "earth",
+        "name": "nex-client",
         "image": "463367046625.dkr.ecr.eu-north-1.amazonaws.com/earth:GIT_COMMIT",
         "cpu": 300,
         "memory": 300,

@@ -4,7 +4,7 @@
     "containerDefinitions": [
       {
         "name": "nex-server",
-        "image": "463367046625.dkr.ecr.eu-north-1.amazonaws.com/earth:GIT_COMMIT",
+        "image": "463367046625.dkr.ecr.eu-north-1.amazonaws.com/nexcore-server:GIT_COMMIT",
         "cpu": 300,
         "memory": 300,
         "memoryReservation": 200,

@@ -1,0 +1,32 @@
+{
+  "family": "nexcore-client-prod",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "256",
+  "memory": "512",
+  "executionRoleArn": "arn:aws:iam::463367046625:role/ecsTaskExecutionRole",
+  "containerDefinitions": [
+    {
+      "name": "nexcore-client",
+      "image": "463367046625.dkr.ecr.eu-north-1.amazonaws.com/nexcore-client:GIT_COMMIT",
+      "portMappings": [
+        {
+          "containerPort": 80,
+          "protocol": "tcp"
+        }
+      ],
+      "environment": [
+        { "name": "LOG_GROUP", "value": "GROUP_NAME" }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/nexcore-client",
+          "awslogs-region": "eu-north-1",
+          "awslogs-stream-prefix": "ecs"
+        }
+      },
+      "essential": true
+    }
+  ]
+}

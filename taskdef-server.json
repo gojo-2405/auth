@@ -1,0 +1,44 @@
+{
+  "family": "nexcore-server-prod",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "512",
+  "memory": "1024",
+  "executionRoleArn": "arn:aws:iam::463367046625:role/ecsTaskExecutionRole",
+  "containerDefinitions": [
+    {
+      "name": "nexcore-server",
+      "image": "463367046625.dkr.ecr.eu-north-1.amazonaws.com/nexcore-server:GIT_COMMIT",
+      "portMappings": [
+        {
+          "containerPort": 5000,
+          "protocol": "tcp"
+        }
+      ],
+      "environment": [
+        { "name": "NODE_ENV",      "value": "production" },
+        { "name": "PORT",          "value": "5000" },
+        { "name": "DB_SSL",        "value": "true" },
+        { "name": "LOG_GROUP",     "value": "GROUP_NAME" }
+      ],
+      "secrets": [
+        { "name": "DB_HOST",       "valueFrom": "arn:aws:ssm:eu-north-1:463367046625:parameter/nexcore/DB_HOST" },
+        { "name": "DB_PORT",       "valueFrom": "arn:aws:ssm:eu-north-1:463367046625:parameter/nexcore/DB_PORT" },
+        { "name": "DB_NAME",       "valueFrom": "arn:aws:ssm:eu-north-1:463367046625:parameter/nexcore/DB_NAME" },
+        { "name": "DB_USER",       "valueFrom": "arn:aws:ssm:eu-north-1:463367046625:parameter/nexcore/DB_USER" },
+        { "name": "DB_PASSWORD",   "valueFrom": "arn:aws:ssm:eu-north-1:463367046625:parameter/nexcore/DB_PASSWORD" },
+        { "name": "JWT_SECRET",    "valueFrom": "arn:aws:ssm:eu-north-1:463367046625:parameter/nexcore/JWT_SECRET" },
+        { "name": "CLIENT_URL",    "valueFrom": "arn:aws:ssm:eu-north-1:463367046625:parameter/nexcore/CLIENT_URL" }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/nexcore-server",
+          "awslogs-region": "eu-north-1",
+          "awslogs-stream-prefix": "ecs"
+        }
+      },
+      "essential": true
+    }
+  ]
+}
